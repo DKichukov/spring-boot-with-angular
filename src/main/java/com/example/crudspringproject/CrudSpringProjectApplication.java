@@ -1,4 +1,4 @@
-package com.lesson.crud_spring_project;
+package com.example.crudspringproject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
