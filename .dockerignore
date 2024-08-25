@@ -1,0 +1,5 @@
+# Ignore all files except necessary ones
+*
+!src/
+!pom.xml
+!nginx.conf

@@ -1,52 +1,50 @@
-version: '3.8'
+version: "4.0"
 
 services:
   db:
-    image: mysql:8.0
-    container_name: mysql_db
+    image: postgres:14.0-alpine3.14
+    container_name: postgres_db
     restart: on-failure
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-        - "${DB_PORT}:3306"
+        - "${DB_PORT}:${DB_PORT}"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/postgresql/data
     networks:
       - csp-network
 
   #### build app ####
-#  crud-spring-project:
-#    container_name: csp-app
-#    build:
-#      context: ../
-#      dockerfile: Dockerfile
-#    image: csp-app
-#    ports:
-#      - "8090:8090"
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://db:{DB_PORT}/${MYSQL_DATABASE}
-#      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
-#      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
-#    depends_on:
-#      - db
-#    networks:
-#      - csp-network
+  crud-spring-project:
+    container_name: csp-app
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    image: csp-app
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:${DB_PORT}/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - csp-network
 
-  ### build angular app ###
-#  angular-app:
-#    container_name: angular-app
-#    build:
-#      context: ../crud-angular-project/
-#      dockerfile: Dockerfile
-#    image: angular-app
-#    ports:
-#      - "4200:80"
-#    networks:
-#      - csp-network
-
+  ## build angular app ###
+  angular-app:
+    container_name: angular-app
+    build:
+      context: ../crud-angular-project
+      dockerfile: Dockerfile
+    image: angular-app
+    ports:
+      - "4200:80"
+    networks:
+      - csp-network
 
 volumes:
   db_data:

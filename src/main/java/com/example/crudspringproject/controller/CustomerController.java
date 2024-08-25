@@ -6,6 +6,7 @@ import com.example.crudspringproject.dto.CustomerDto;
 import com.example.crudspringproject.entity.Customer;
 import com.example.crudspringproject.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
