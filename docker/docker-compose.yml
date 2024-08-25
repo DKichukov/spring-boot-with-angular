@@ -11,11 +11,42 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
-      - "3306:3306"
+        - "${DB_PORT}:3306"
     volumes:
       - db_data:/var/lib/mysql
     networks:
       - csp-network
+
+  #### build app ####
+#  crud-spring-project:
+#    container_name: csp-app
+#    build:
+#      context: ../
+#      dockerfile: Dockerfile
+#    image: csp-app
+#    ports:
+#      - "8090:8090"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://db:{DB_PORT}/${MYSQL_DATABASE}
+#      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+#      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+#    depends_on:
+#      - db
+#    networks:
+#      - csp-network
+
+  ### build angular app ###
+#  angular-app:
+#    container_name: angular-app
+#    build:
+#      context: ../crud-angular-project/
+#      dockerfile: Dockerfile
+#    image: angular-app
+#    ports:
+#      - "4200:80"
+#    networks:
+#      - csp-network
+
 
 volumes:
   db_data:
