@@ -35,10 +35,12 @@ public class SimpleCorsFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
+        // This method is intentionally left empty as per design requirements.
     }
 
     @Override
     public void destroy() {
+        // This method is intentionally left empty as per design requirements.
     }
 
 }
