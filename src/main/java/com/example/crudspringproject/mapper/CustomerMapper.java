@@ -2,6 +2,7 @@ package com.example.crudspringproject.mapper;
 
 import com.example.crudspringproject.dto.CustomerDto;
 import com.example.crudspringproject.entity.Customer;
+import java.util.List;
 
 public class CustomerMapper {
 
@@ -13,6 +14,10 @@ public class CustomerMapper {
         return new CustomerDto(customer.getId(), customer.getName(), customer.getEmail(), customer.getPhone());
     }
 
+    public static List<CustomerDto> toDtoList(List<Customer> customers) {
+        return customers.stream().map(CustomerMapper::toDto).toList();
+    }
+
     public static Customer toEntity(CustomerDto customerDto) {
         Customer customer = new Customer();
         customer.setId(customerDto.id());
@@ -22,4 +27,7 @@ public class CustomerMapper {
         return customer;
     }
 
+    public static List<Customer> toEntityList(List<CustomerDto> customerDtoList) {
+        return customerDtoList.stream().map(CustomerMapper::toEntity).toList();
+    }
 }
