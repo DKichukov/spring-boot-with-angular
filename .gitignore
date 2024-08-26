@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .env
+.env.project
+
 
 ### STS ###
 .apt_generated
@@ -32,3 +34,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Docker ###
+docker/.env
