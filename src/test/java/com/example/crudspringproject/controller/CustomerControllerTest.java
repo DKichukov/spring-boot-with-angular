@@ -1,18 +1,17 @@
 package com.example.crudspringproject.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.example.crudspringproject.dto.CustomerDto;
 import com.example.crudspringproject.entity.Customer;
 import com.example.crudspringproject.repository.CustomerRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Arrays;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -50,6 +49,13 @@ class CustomerControllerTest {
         postgres.start();
     }
 
+    @BeforeEach
+    void setUp() {
+        if (customerRepository.count() > 0) {
+            customerRepository.deleteAll();
+        }
+    }
+
     @Test
     void connectionEstablished() {
         assertThat(postgres.isCreated()).isTrue();
@@ -61,11 +67,11 @@ class CustomerControllerTest {
         CustomerDto customerDto = new CustomerDto(1, "John Doe", "john.doe@example.com", "123456789");
 
         MvcResult result;
-            result = mockMvc.perform(MockMvcRequestBuilders.post("/api/customer")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(asJsonString(customerDto)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
+        result = mockMvc.perform(MockMvcRequestBuilders.post("/api/customer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customerDto)))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andReturn();
 
         Customer createdCustomer = objectMapper.readValue(result.getResponse().getContentAsString(), Customer.class);
         assertThat(createdCustomer.getId()).isNotNull();
@@ -76,27 +82,25 @@ class CustomerControllerTest {
 
     @Test
     void testGetAllCustomers() throws Exception {
-        Customer customer1 = createCustomer("John Doe",  "123456789","john.doe@example.com");
-        Customer customer2 = createCustomer("Jane Doe", "987654321","jane.doe@example.com");
-        List<Customer> customers = Arrays.asList(customer1, customer2);
+        createCustomer("John Doe", "123456789", "john.doe@example.com");
+        createCustomer("Jane Doe", "987654321", "jane.doe@example.com");
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/customers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(customers)))
+                .contentType(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn();
 
         String responseContent = result.getResponse().getContentAsString();
-        List<CustomerDto> retrievedCustomers = objectMapper.readValue(responseContent, new TypeReference<List<CustomerDto>>() {});
+        List<CustomerDto> retrievedCustomers = objectMapper.readValue(responseContent, new TypeReference<>() {
+        });
 
-
-        Assertions.assertNotNull(retrievedCustomers);
+        assertNotNull(retrievedCustomers);
         assertEquals(2, retrievedCustomers.size());
         CustomerDto retrievedCustomer1 = retrievedCustomers.stream()
             .filter(c -> c.email().equals("john.doe@example.com"))
             .findFirst()
             .orElse(null);
-        Assertions.assertNotNull(retrievedCustomer1);
+        assertNotNull(retrievedCustomer1);
         assertEquals("John Doe", retrievedCustomer1.name());
         assertEquals("123456789", retrievedCustomer1.phone());
 
@@ -104,13 +108,42 @@ class CustomerControllerTest {
             .filter(c -> c.email().equals("jane.doe@example.com"))
             .findFirst()
             .orElse(null);
-        Assertions.assertNotNull(retrievedCustomer2);
+        assertNotNull(retrievedCustomer2);
         assertEquals("Jane Doe", retrievedCustomer2.name());
         assertEquals("987654321", retrievedCustomer2.phone());
 
     }
 
-    private Customer createCustomer(String name, String phone,String email) {
+    @Test
+    void getCustomerByIdShouldReturnCorrectCustomer() throws Exception {
+        Customer customer = createCustomer("John Doe", "123456789", "john.doe@example.com");
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/customer/{id}", customer.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+            .andReturn();
+
+        String responseContent = result.getResponse().getContentAsString();
+        CustomerDto retrievedCustomer = objectMapper.readValue(responseContent, CustomerDto.class);
+
+        assertNotNull(retrievedCustomer, "Retrieved customer should not be null");
+        assertEquals("John Doe", retrievedCustomer.name(), "Customer name should match");
+        assertEquals("123456789", retrievedCustomer.phone(), "Customer phone should match");
+        assertEquals("john.doe@example.com", retrievedCustomer.email(), "Customer email should match");
+    }
+
+    @Test
+    void getCustomerById_ShouldReturn404WhenCustomerNotFound() throws Exception {
+
+        int nonExistentCustomerId = 111;
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/customer/{id}", nonExistentCustomerId)
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.status().is(404));
+    }
+
+    private Customer createCustomer(String name, String phone, String email) {
         Customer customer = new Customer();
         customer.setName(name);
         customer.setPhone(phone);

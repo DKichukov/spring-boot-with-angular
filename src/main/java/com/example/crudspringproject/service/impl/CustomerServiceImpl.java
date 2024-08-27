@@ -4,8 +4,11 @@ import static com.example.crudspringproject.mapper.CustomerMapper.toDtoList;
 
 import com.example.crudspringproject.dto.CustomerDto;
 import com.example.crudspringproject.entity.Customer;
+import com.example.crudspringproject.mapper.CustomerMapper;
 import com.example.crudspringproject.repository.CustomerRepository;
+import com.example.crudspringproject.service.CustomerService;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +27,11 @@ public class CustomerServiceImpl implements CustomerService {
     public List<CustomerDto> getAllCustomers() {
         List<Customer> customers = customerRepository.findAll();
         return toDtoList(customers);
+    }
+
+    public CustomerDto getCustomerById(Integer id) {
+        Optional<Customer> customer = customerRepository.findById(id);
+        return customer.map(CustomerMapper::toDto)
+            .orElse(null);
     }
 }

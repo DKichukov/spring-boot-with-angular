@@ -1,4 +1,4 @@
-package com.example.crudspringproject.service.impl;
+package com.example.crudspringproject.service;
 
 import com.example.crudspringproject.dto.CustomerDto;
 import com.example.crudspringproject.entity.Customer;
@@ -9,4 +9,6 @@ public interface CustomerService {
     Customer postCustomer(Customer customer);
 
     List<CustomerDto> getAllCustomers();
+
+    CustomerDto getCustomerById(Integer id);
 }
