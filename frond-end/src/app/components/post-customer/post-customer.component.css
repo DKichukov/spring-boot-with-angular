@@ -1,53 +1,39 @@
+/* Ensure your global styles include Angular Material themes */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: calc(100vh - 130px); /* Adjust height to center properly */
   margin-top: 130px;
 }
 
 .form-container {
-  width: 300px;
+  width: 100%;
+  max-width: 400px; /* Increase max-width for larger screens */
   padding: 20px;
   background-color: #fff;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-  margin-bottom: 15px;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box; /* Includes padding in width calculation */
 }
 
 .form-title {
-  margin-left: 55px;
+  text-align: center; /* Center-align title */
+  color: #3f51b5; /* Matches Angular Material Indigo theme */
+  margin-bottom: 20px;
 }
 
-label {
-  display: block;
-  font-weight: bold;
+.form-group {
+  margin-bottom: 20px; /* Increased margin for better spacing */
 }
 
-input[type="text"],
-input[type="email"],
-input[type="tel"] {
-  width: 90%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+mat-form-field {
+  width: 100%; /* Ensure the field takes full width of its container */
 }
 
 button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  padding: 10px 20px;
-  cursor: pointer;
-  margin-left: 110px;
-}
-
-button:hover {
-  background-color: #0056b3;
+  width: 100%; /* Full width for the button */
 }

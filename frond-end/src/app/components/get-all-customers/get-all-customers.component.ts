@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { MatTableDataSource } from "@angular/material/table";
 import { CustomerService } from "src/app/services/customer.service";
 
 @Component({
@@ -7,6 +8,7 @@ import { CustomerService } from "src/app/services/customer.service";
   styleUrls: ["./get-all-customers.component.css"],
 })
 export class GetAllCustomersComponent {
+   displayedColumns: string[] = ['name', 'email', 'phone', 'action'];
   customers: any = [];
 
   constructor(private customerService: CustomerService) {}

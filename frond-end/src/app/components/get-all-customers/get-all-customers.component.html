@@ -1,26 +1,35 @@
-<button class="btn-new" routerLink="/customer">Post New Customer</button>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let customer of customers">
-      <td>{{ customer.name }}</td>
-      <td>{{ customer.email }}</td>
-      <td>{{ customer.phone }}</td>
-      <td style="display: flex; justify-content: center; gap: 15px;">
-        <button class="btn-update" routerLink="/customers/{{ customer.id }}">
-          Update
-        </button>
-        <button class="btn-delete" (click)="deleteCustomer(customer.id)">
-          Delete
-        </button>
+<button mat-raised-button color="primary" routerLink="/customer">Post New Customer</button>
+
+ <span class="title-container">
+    <h1 class="title">List of All Customers</h1>
+ </span>
+
+<table mat-table [dataSource]="customers" class="mat-elevation-z8">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let customer">{{ customer.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef>Email</th>
+    <td mat-cell *matCellDef="let customer">{{ customer.email }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="phone">
+    <th mat-header-cell *matHeaderCellDef>Phone</th>
+    <td mat-cell *matCellDef="let customer">{{ customer.phone }}</td>
+  </ng-container>
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let customer">
+        <div class="action-buttons">
+          <button mat-button color="primary" routerLink="/customers/{{ customer.id }}">Update</button>
+          <button mat-button color="warn" (click)="deleteCustomer(customer.id)">Delete</button>
+        </div>
       </td>
-    </tr>
-  </tbody>
+    </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>

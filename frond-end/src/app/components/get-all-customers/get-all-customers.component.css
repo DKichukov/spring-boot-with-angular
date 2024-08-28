@@ -1,48 +1,86 @@
-table {
+/* Ensure your global styles include Angular Material themes */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+.container {
   width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+button {
+  margin-bottom: 20px;
+}
+
+.title-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #3f51b5; /* Match Angular Material Indigo theme */
+}
+
+.mat-table {
+  width: 100%;
   border-collapse: collapse;
-  margin: 20px auto;
 }
 
-th,
-td {
-  border: 1px solid #ccc;
-  padding: 8px;
-  text-align: left;
-}
-
-th {
+.mat-header-cell {
   background-color: #007bff;
   color: #fff;
+  font-weight: bold;
+  text-align: center; /* Center align header text */
 }
 
-tr:nth-child(even) {
+.mat-cell {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center; /* Center align cell content */
+  vertical-align: middle; /* Vertical alignment for better centering */
+}
+
+.mat-row:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-.btn-update,
-.btn-delete,
-.btn-new {
+.action-buttons {
+  display: flex;
+  justify-content: left; /* Horizontally center buttons */
+  align-items: center; /* Vertically center buttons */
+  gap: 10px; /* Space between buttons */
+}
+
+button {
+  border-radius: 3px;
   padding: 5px 10px;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.mat-raised-button {
+  margin: 0; /* Remove margin from buttons for alignment consistency */
+}
+
+button.mat-button {
+  text-transform: none;
+}
+
+button.mat-raised-button.primary {
   background-color: #007bff;
   color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
 }
 
-.btn-new {
-  margin-top: 50px;
-}
-
-.btn-update {
-  margin-right: 15px;
-  background-color: green;
-}
-.btn-new:hover {
+button.mat-raised-button.primary:hover {
   background-color: #0056b3;
 }
-.btn-delete {
-  margin-right: 5px;
-  background-color: red;
+
+button.mat-button.warn {
+  color: #fff;
+  background-color: #f44336;
+}
+
+button.mat-button.warn:hover {
+  background-color: #c62828;
 }
