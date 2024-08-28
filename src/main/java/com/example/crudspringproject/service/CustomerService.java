@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CustomerService {
 
-    Customer postCustomer(Customer customer);
+    CustomerDto postCustomer(Customer customer);
 
     List<CustomerDto> getAllCustomers();
 

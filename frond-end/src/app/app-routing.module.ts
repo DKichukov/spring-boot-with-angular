@@ -7,7 +7,7 @@ import { UpdateCustomerComponent } from "./components/update-customer/update-cus
 const routes: Routes = [
   { path: "customer", component: PostCustomerComponent },
   { path: "", component: GetAllCustomersComponent },
-  { path: "customer/:id", component: UpdateCustomerComponent},
+  { path: "customers/:id", component: UpdateCustomerComponent},
 ];
 
 @NgModule({

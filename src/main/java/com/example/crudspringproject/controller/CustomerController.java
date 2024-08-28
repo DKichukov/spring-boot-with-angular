@@ -3,7 +3,6 @@ package com.example.crudspringproject.controller;
 import static com.example.crudspringproject.mapper.CustomerMapper.toEntity;
 
 import com.example.crudspringproject.dto.CustomerDto;
-import com.example.crudspringproject.entity.Customer;
 import com.example.crudspringproject.service.CustomerService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,16 +22,18 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping("/customer")
-    Customer postCustomer(@RequestBody CustomerDto customerDto) {
-        return customerService.postCustomer(toEntity(customerDto));
+    ResponseEntity<CustomerDto> postCustomer(@RequestBody CustomerDto customerDto) {
+        CustomerDto savedCustomerDto = customerService.postCustomer(toEntity(customerDto));
+        return ResponseEntity.ok(savedCustomerDto);
     }
 
     @GetMapping("/customers")
-    List<CustomerDto> getCustomers() {
-        return customerService.getAllCustomers();
+    ResponseEntity<List<CustomerDto>> getCustomers() {
+        List<CustomerDto> allCustomers = customerService.getAllCustomers();
+        return ResponseEntity.ok(allCustomers);
     }
 
-    @GetMapping("/customer/{id}")
+    @GetMapping("/customers/{id}")
     ResponseEntity<CustomerDto> getCustomerById(@PathVariable Integer id) {
         CustomerDto customerDto = customerService.getCustomerById(id);
         if (customerDto == null) {

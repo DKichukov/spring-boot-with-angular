@@ -1,5 +1,6 @@
 package com.example.crudspringproject.service.impl;
 
+import static com.example.crudspringproject.mapper.CustomerMapper.toDto;
 import static com.example.crudspringproject.mapper.CustomerMapper.toDtoList;
 
 import com.example.crudspringproject.dto.CustomerDto;
@@ -19,8 +20,9 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
 
     @Override
-    public Customer postCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public CustomerDto postCustomer(Customer customer) {
+        Customer savedCustomer = customerRepository.save(customer);
+        return toDto(savedCustomer);
     }
 
     @Override

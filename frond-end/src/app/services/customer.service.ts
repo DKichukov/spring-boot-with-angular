@@ -21,6 +21,6 @@ export class CustomerService {
   }
 
   getCustomerById(customerId: number): Observable<any> {
-    return this.http.get(BASIC_URL + "/api/customer/" + customerId);
+    return this.http.get(BASIC_URL + "/api/customers/" + customerId);
   }
 }
