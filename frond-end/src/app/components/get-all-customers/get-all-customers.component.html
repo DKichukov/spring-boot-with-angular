@@ -11,11 +11,14 @@
   <tbody>
     <tr *ngFor="let customer of customers">
       <td>{{ customer.name }}</td>
-      <td>{{ customer.email }}</td> 
+      <td>{{ customer.email }}</td>
       <td>{{ customer.phone }}</td>
-      <td>
+      <td style="display: flex; justify-content: center; gap: 15px;">
         <button class="btn-update" routerLink="/customers/{{ customer.id }}">
           Update
+        </button>
+        <button class="btn-delete" (click)="deleteCustomer(customer.id)">
+          Delete
         </button>
       </td>
     </tr>

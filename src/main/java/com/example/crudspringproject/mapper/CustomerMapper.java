@@ -26,8 +26,4 @@ public class CustomerMapper {
         customer.setPhone(customerDto.phone());
         return customer;
     }
-
-    public static List<Customer> toEntityList(List<CustomerDto> customerDtoList) {
-        return customerDtoList.stream().map(CustomerMapper::toEntity).toList();
-    }
 }

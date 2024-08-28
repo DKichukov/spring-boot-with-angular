@@ -7,6 +7,7 @@ import com.example.crudspringproject.service.CustomerService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,17 +38,18 @@ public class CustomerController {
     @GetMapping("/customers/{id}")
     ResponseEntity<CustomerDto> getCustomerById(@PathVariable Integer id) {
         CustomerDto customerDto = customerService.getCustomerById(id);
-        if (customerDto == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(customerDto);
     }
+
     @PutMapping("/customers/{id}")
     ResponseEntity<CustomerDto> updateCustomer(@PathVariable Integer id, @RequestBody CustomerDto customerDto) {
         CustomerDto updatedCustomerDto = customerService.updateCustomer(id, toEntity(customerDto));
-        if (updatedCustomerDto == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(updatedCustomerDto);
+    }
+
+    @DeleteMapping("/customers/{id}")
+    ResponseEntity<Void> deleteCustomer(@PathVariable Integer id) {
+        customerService.deleteCustomer(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -21,4 +21,11 @@ export class GetAllCustomersComponent {
       console.log(res);
     });
   }
+
+  deleteCustomer(id: number) {
+    this.customerService.deleteCustomer(id).subscribe((res) => {
+      console.log(res);
+      this.getAllCustomers();
+    });
+  }
 }

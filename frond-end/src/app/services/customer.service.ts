@@ -28,4 +28,8 @@ export class CustomerService {
       headers,
     });
   }
+  
+  deleteCustomer(id: number): Observable<any> {
+   return this.http.delete(BASIC_URL + "/api/customers/" +id);
+  }
 }

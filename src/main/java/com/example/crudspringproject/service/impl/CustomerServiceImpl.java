@@ -5,11 +5,11 @@ import static com.example.crudspringproject.mapper.CustomerMapper.toDtoList;
 
 import com.example.crudspringproject.dto.CustomerDto;
 import com.example.crudspringproject.entity.Customer;
+import com.example.crudspringproject.exception.CustomerNotFoundException;
 import com.example.crudspringproject.mapper.CustomerMapper;
 import com.example.crudspringproject.repository.CustomerRepository;
 import com.example.crudspringproject.service.CustomerService;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,21 +32,29 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public CustomerDto getCustomerById(Integer id) {
-        Optional<Customer> customer = customerRepository.findById(id);
-        return customer.map(CustomerMapper::toDto)
-            .orElse(null);
+        return customerRepository.findById(id)
+            .map(CustomerMapper::toDto)
+            .orElseThrow(() -> {
+                return new CustomerNotFoundException("Customer not found with id: " + id);
+            });
     }
 
     @Override
     public CustomerDto updateCustomer(Integer id, Customer customer) {
-        Optional<Customer> foundCustomer = customerRepository.findById(id);
-        if(foundCustomer.isPresent()) {
-            Customer updatedCustomer = foundCustomer.get();
-            updatedCustomer.setName(customer.getName());
-            updatedCustomer.setEmail(customer.getEmail());
-            updatedCustomer.setPhone(customer.getPhone());
-            return toDto(customerRepository.save(updatedCustomer));
-        }
-        return null;
+        Customer foundCustomer = customerRepository.findById(id)
+            .orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + id));
+
+        foundCustomer.setName(customer.getName());
+        foundCustomer.setEmail(customer.getEmail());
+        foundCustomer.setPhone(customer.getPhone());
+
+        return toDto(customerRepository.save(foundCustomer));
+    }
+
+    @Override
+    public void deleteCustomer(Integer id) {
+        Customer customer = customerRepository.findById(id)
+            .orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + id));
+        customerRepository.delete(customer);
     }
 }
