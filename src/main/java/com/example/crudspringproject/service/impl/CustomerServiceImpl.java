@@ -36,4 +36,17 @@ public class CustomerServiceImpl implements CustomerService {
         return customer.map(CustomerMapper::toDto)
             .orElse(null);
     }
+
+    @Override
+    public CustomerDto updateCustomer(Integer id, Customer customer) {
+        Optional<Customer> foundCustomer = customerRepository.findById(id);
+        if(foundCustomer.isPresent()) {
+            Customer updatedCustomer = foundCustomer.get();
+            updatedCustomer.setName(customer.getName());
+            updatedCustomer.setEmail(customer.getEmail());
+            updatedCustomer.setPhone(customer.getPhone());
+            return toDto(customerRepository.save(updatedCustomer));
+        }
+        return null;
+    }
 }

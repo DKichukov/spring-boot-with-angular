@@ -117,7 +117,7 @@ class CustomerControllerTest {
     @Test
     void getCustomerByIdShouldReturnCorrectCustomer() throws Exception {
         Customer customer = createCustomer("John Doe", "123456789", "john.doe@example.com");
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/customer/{id}", customer.getId())
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/customers/{id}", customer.getId())
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -140,7 +140,38 @@ class CustomerControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/customer/{id}", nonExistentCustomerId)
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.status().is(404));
+            .andExpect(MockMvcResultMatchers.status().is(404));
+    }
+    @Test
+    void updateCustomerShouldReturnUpdatedCustomer() throws Exception {
+        Customer customer = createCustomer("John Doe", "123456789", "john.doe@example.com");
+        Customer newCustomer = createCustomer("Jane Doe", "987654321", "jane.doe@example.com");
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/customers/" + customer.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(newCustomer)))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+            .andReturn();
+
+        String responseContent = result.getResponse().getContentAsString();
+        CustomerDto retrievedCustomer = objectMapper.readValue(responseContent, CustomerDto.class);
+
+        assertNotNull(retrievedCustomer, "Retrieved customer should not be null");
+        assertEquals("Jane Doe", retrievedCustomer.name(), "Customer name should match");
+        assertEquals("987654321", retrievedCustomer.phone(), "Customer phone should match");
+        assertEquals("jane.doe@example.com", retrievedCustomer.email(), "Customer email should match");
+    }
+    @Test
+    void updateCustomerShouldReturnEmptyCustomer() throws Exception {
+       int id = 123;
+        Customer newCustomer = createCustomer("Jane Doe", "987654321", "jane.doe@example.com");
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/customers/" + id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(newCustomer)))
+            .andExpect(MockMvcResultMatchers.status().isNotFound())
+            .andExpect(MockMvcResultMatchers.status().is(404));
     }
 
     private Customer createCustomer(String name, String phone, String email) {

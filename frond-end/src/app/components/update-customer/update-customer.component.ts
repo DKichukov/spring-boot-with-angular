@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { CustomerService } from "src/app/services/customer.service";
 
 @Component({
@@ -15,7 +15,8 @@ export class UpdateCustomerComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private customerService: CustomerService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -34,4 +35,15 @@ export class UpdateCustomerComponent implements OnInit {
       this.updateCustomerForm.patchValue(data);
     });
   }
+
+  updateCustomer() {
+    this.customerService
+      .updateCustomer(this.id, this.updateCustomerForm.value)
+      .subscribe((data) => {
+        console.log(data);
+        if(this.id !== null){
+          this.router.navigate([""]);
+        }
+      });
+  } 
 }
