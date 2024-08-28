@@ -38,7 +38,7 @@ services:
   angular-app:
     container_name: angular-app
     build:
-      context: ../crud-angular-project
+      context: ../frond-end
       dockerfile: Dockerfile
     image: angular-app
     ports:
